@@ -6,7 +6,7 @@ const TodoItem = React.memo(function TodoItem({ todo, onToggle }) {
       style={{ textDecoration: todo.done ? 'line-through' : 'none' }}
       onClick={() => onToggle(todo.id)}
     >
-      <input type="checkbox" checked={todo.done} />
+      <input type="checkbox" defaultChecked={todo.done} />
       {todo.text}
     </li>
   );
@@ -15,8 +15,8 @@ const TodoItem = React.memo(function TodoItem({ todo, onToggle }) {
 const TodoList = React.memo(function TodoList({ todos, onToggle }) {
   return (
     <ul>
-      {todos.map((todo) => (
-        <TodoItem todo={todo} onToggle={onToggle} />
+      {todos.map((todo, index) => (
+        <TodoItem key={index} todo={todo} onToggle={onToggle} />
       ))}
     </ul>
   );
