@@ -1,20 +1,21 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Post from "../components/Post";
-import { clearPost, getPost } from "../modules/posts";
+import { reducerUtils } from "../lib/asyncUtils";
+import { getPost } from "../modules/posts";
 
 function PostContainer({ id }) {
-  const { loading, data, error } = useSelector((state) => state.posts.post);
+  const { loading, data, error } = useSelector(
+    (state) => state.posts.post[id] || reducerUtils.initial()
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (data) return;
     dispatch(getPost(id));
-    return () => {
-      dispatch(clearPost());
-    };
-  }, [id, dispatch]);
+  }, [id, dispatch, data]);
 
-  if (loading) return <div>로딩중...</div>;
+  if (loading && !data) return <div>로딩중...</div>;
   if (error) return <div>에러 발생!</div>;
   if (!data) return null;
 
